@@ -225,3 +225,13 @@ Bootstrap
 Успешно создано:
 
 ![admin created](https://user-images.githubusercontent.com/122292517/212726458-464eea71-e4f2-4754-8e1d-af96970fc854.jpg)
+
+### Внедрение
+
+#### Файлы на хостинге:
+
+![hosting](https://user-images.githubusercontent.com/122292517/212727366-e261d854-9cf5-42b1-b27d-93b626a07619.jpg)
+
+#### База данных на хостинге:
+
+![bd](https://user-images.githubusercontent.com/122292517/212728089-8cc7a60e-a6f8-4b7c-842c-f49341d919ee.jpg)
