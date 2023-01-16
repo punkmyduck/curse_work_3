@@ -98,3 +98,130 @@ Bootstrap
 - **food_menu**, со столбцами **id** (ключевой, автоинкремент), **product_name** (хранение названия продукта), **product_text** (хранение описания продукта), **picture** (хранение картинки), **price** (хранение цены) 
 
 ### Алгоритмы
+
+Алгоритм авторизации:
+
+![3alg](https://user-images.githubusercontent.com/122292517/212717610-4e77bae6-256e-434b-9a93-91112d1be7c2.jpg)
+
+### Значимые фрагменты кода
+
+**fetch()**-запрос при авторизации:
+
+        <script>
+            document.getElementById("enter").addEventListener('click', () => {
+                let login = document.getElementById('login').value;
+                let password = document.getElementById('password').value;
+                let create_data = new FormData();
+                create_data.append('login', login);
+                create_data.append('password', password);
+                fetch('auth_index.php', {method: 'POST', body: create_data})
+                    .then( resp => {
+                        return resp.text();
+                    })
+                    .then( msg => {
+                        flag = msg;
+                        if(flag == -1) {
+                            document.getElementById("message").innerHTML='incorrect login or password, try again';
+                        }
+                        else if (flag == 1) {
+                        window.location.href = 'editmenu.php';
+                        }
+                    }) 
+            })
+        </script>
+
+**fetch()**-запрос при изменении блюда в меню:
+
+    <script>
+    document.getElementById("save_changes<?= $row['id'] ?>").addEventListener('click', () => {
+        let product_name = document.getElementById("product_name<?= $row['id'] ?>").value,
+            price = document.getElementById("price<?= $row['id'] ?>").value,
+            product_text = document.getElementById("product_text<?= $row['id'] ?>").value,
+            product_picture = document.getElementById("product_picture<?= $row['id'] ?>").value,
+            product_id = <?= $row['id'] ?>;
+        let create_data = new FormData();
+        create_data.append('product_name', product_name);
+        create_data.append('price', price);
+        create_data.append('product_text', product_text);
+        create_data.append('product_picture', product_picture);
+        create_data.append('id', product_id);
+        fetch('edit_menu_index.php', {method: 'POST', body: create_data})
+        .then( resp => {
+            return resp.text();
+        })
+        .then( (msg) => {
+            flag = msg;
+            if(flag == -1) {
+                new_content="не все поля введены";
+                document.getElementById('message_for_user<?= $row['id'] ?>').innerHTML = new_content;
+            }
+            else if (flag == 1) {
+                document.getElementById("menu_product_name<?= $row['id'] ?>").innerHTML = product_name;
+                document.getElementById("menu_price<?= $row['id'] ?>").innerHTML = price;
+                document.getElementById("menu_product_text<?= $row['id'] ?>").innerHTML = product_text;
+            }
+        }) 
+        })
+    </script>
+    
+**fetch()**-запрос при удалении блюда из меню:
+
+    <script>
+        document.getElementById("delete_data<?= $row['id'] ?>").addEventListener('click', () => {
+            let deleted_product_id=<?= $row['id'] ?>;
+            let delete_data = new FormData();
+            delete_data.append('id', deleted_product_id);
+            fetch('delete_index.php', {method: 'POST', body: delete_data})
+            document.getElementById("main_container<?= $row['id'] ?>").remove();
+        })
+    </script>
+ 
+**fetch()**-запрос при добавлении блюда в меню
+
+        <script>
+            document.getElementById('create_new_product_one').addEventListener('click', () => {
+                let new_product_name=document.getElementById('new_product_name').value,
+                    new_price=document.getElementById('new_price').value,
+                    new_product_text=document.getElementById('new_product_text').value,
+                    new_picture=document.getElementById('new_product_picture').value;
+                let create_new_product= new FormData();
+                create_new_product.append('product_name', new_product_name);
+                create_new_product.append('price', new_price);
+                create_new_product.append('product_text', new_product_text);
+                create_new_product.append('picture', new_picture);
+                fetch('create_new_product.php', {method: 'POST', body: create_new_product});
+            })
+        </script>
+        
+### Тестирование
+Добавляем товары в корзину:
+
+![menu](https://user-images.githubusercontent.com/122292517/212725847-8d6cd89a-47cc-4d96-8a35-a4200555d239.jpg)
+
+Смотрим товары в корзине:
+
+![cart](https://user-images.githubusercontent.com/122292517/212725885-9427104b-2586-410f-9754-d7110f4563ce.jpg)
+
+Удаляем товар из корзины:
+
+![delete_from_cart](https://user-images.githubusercontent.com/122292517/212725929-23130b12-5880-4e6f-a435-81863836107b.jpg)
+
+Переходим в оплату:
+
+![queue](https://user-images.githubusercontent.com/122292517/212726017-c8926a5c-7a1b-4476-b1e1-5a2ee16db75f.jpg)
+
+Авторизация для администраторов:
+
+![admin auth](https://user-images.githubusercontent.com/122292517/212726077-ba72da2f-4e0e-4392-b2d3-1c1cf47d38d4.jpg)
+
+Удаление из меню блюд:
+
+![admin delete](https://user-images.githubusercontent.com/122292517/212726303-c4c58930-7588-497e-9b34-19a12774c0d0.jpg)
+
+Создаем обратно:
+
+![admin create](https://user-images.githubusercontent.com/122292517/212726430-f17b2a4d-e4fb-4c83-ba2a-b24f90343355.jpg)
+
+Успешно создано:
+
+![admin created](https://user-images.githubusercontent.com/122292517/212726458-464eea71-e4f2-4754-8e1d-af96970fc854.jpg)
